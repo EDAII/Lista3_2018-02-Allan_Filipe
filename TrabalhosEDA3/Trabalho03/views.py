@@ -9,24 +9,20 @@ def home(request):
         # Convert to a "unicode" object
         text_obj = byte_str.decode('UTF-8')
         columns_descriptions, all_data = read_csv(text_obj.splitlines())
-        #
-        # print("ORDENAÇÃO selectionSort")
 
         sorted_data, selection_sort_time = selectionSort(all_data)
 
-        # # print("ORDENAÇÃO insertionSort")
-        #
         sorted_data, insertion_sort_time = insertionSort(all_data)
 
-        # # print("ORDENAÇÃO bubbleSort")
         sorted_data, bubble_sort_time = bubbleSort(all_data)
 
-        # # print("ORDENAÇÃO shellSort")
         sorted_data, shell_sort_time = shellSort(all_data)
 
         sorted_data, count_sort_time = countSort(all_data)
 
         sorted_data, radix_sort_time = radixSort(all_data)
+
+        sorted_data, quick_sort_time = quickSort(all_data)
 
         return render(request, 'result.html', {'columns_descriptions': columns_descriptions,
                                                'sorted_data': sorted_data,
@@ -35,7 +31,8 @@ def home(request):
                                                'bubble_sort_time': bubble_sort_time,
                                                'shell_sort_time': shell_sort_time,
                                                'count_sort_time': count_sort_time,
-                                               'radix_sort_time': radix_sort_time})
+                                               'radix_sort_time': radix_sort_time,
+                                               'quick_sort_time': quick_sort_time})
     else:
         # Nothing to do
         pass
@@ -144,7 +141,6 @@ def countSort(dataset):
 
     # The sorted_list character array that will have sorted arr
     output_list = [0 for position in range(max([int(item[0]) for item in dataset]) + 2)]
-    print(max([int(item[0]) for item in dataset]) + 2)
 
     # Create a count array to store count of inidividul
     # characters and initialize count array as 0
@@ -202,3 +198,48 @@ def radixSort(dataset):
         for data_list in dataset_list:
             for data in data_list:
                 dataset_append(data)
+
+
+def quickSort(dataset):
+    sorted_list = list(dataset)
+    time_initial = time.time()
+    quickSortHelper(sorted_list, 0, len(sorted_list) - 1)
+    time_final = time.time() - time_initial
+
+    return sorted_list, time_final
+
+
+def quickSortHelper(sorted_list, first, last):
+    if first < last:
+        splitpoint = partition(sorted_list, first, last)
+
+        quickSortHelper(sorted_list, first, splitpoint - 1)
+        quickSortHelper(sorted_list, splitpoint + 1, last)
+
+
+def partition(sorted_list, first, last):
+    pivotvalue = sorted_list[first]
+
+    leftmark = first + 1
+    rightmark = last
+
+    done = False
+    while not done:
+        while leftmark <= rightmark and int(sorted_list[leftmark][0]) <= int(pivotvalue[0]):
+            leftmark = leftmark + 1
+
+        while int(sorted_list[rightmark][0]) >= int(pivotvalue[0]) and rightmark >= leftmark:
+            rightmark = rightmark - 1
+
+        if rightmark < leftmark:
+            done = True
+        else:
+            temp = sorted_list[leftmark]
+            sorted_list[leftmark] = sorted_list[rightmark]
+            sorted_list[rightmark] = temp
+
+    temp = sorted_list[first]
+    sorted_list[first] = sorted_list[rightmark]
+    sorted_list[rightmark] = temp
+
+    return rightmark
