@@ -24,12 +24,15 @@ def home(request):
         # # print("ORDENAÇÃO shellSort")
         sorted_data, shell_sort_time = shellSort(all_data)
 
+        sorted_data, count_sort_time = countSort(all_data)
+
         return render(request, 'result.html', {'columns_descriptions': columns_descriptions,
                                                'sorted_data': sorted_data,
                                                'selection_sort_time': selection_sort_time,
                                                'insertion_sort_time': insertion_sort_time,
                                                'bubble_sort_time': bubble_sort_time,
-                                               'shell_sort_time': shell_sort_time})
+                                               'shell_sort_time': shell_sort_time,
+                                               'count_sort_time': count_sort_time})
     else:
         # Nothing to do
         pass
@@ -129,3 +132,40 @@ def shellSort(dataset):
 
     time_final = time.time() - time_initial
     return sorted_data, time_final
+
+def countSort(dataset): 
+    sorted_list = list(dataset)
+    time_initial = time.time()
+    # The sorted_list character array that will have sorted arr 
+    output_list = [0 for position in range(99999)] 
+  
+    # Create a count array to store count of inidividul 
+    # characters and initialize count array as 0 
+    count_list = [0 for position in range(99999)] 
+  
+    # For storing the resulting answer since the  
+    # string is immutable 
+    sorted_list = [0 for data in dataset] 
+  
+    # Store count_list of each character 
+    for data in dataset:
+        number = int(data[0]) 
+        count_list[number] += 1
+  
+    # Change count_list[i] so that count_list[i] now contains actual 
+    # position of this character in output_list array 
+    for position in range(99999): 
+        count_list[position] += count_list[position-1] 
+  
+    # Build the output_list character array 
+    for position in range(len(dataset)): 
+        output_list[count_list[int(dataset[position][0])]-1] = dataset[position] 
+        count_list[int(dataset[position][0])] -= 1
+  
+    # Copy the output_list array to arr, so that arr now 
+    # contains sorted characters 
+    for position in range(len(dataset)): 
+        sorted_list[position] = output_list[position]
+
+    time_final = time.time() - time_initial 
+    return sorted_list, time_final
