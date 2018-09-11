@@ -26,13 +26,16 @@ def home(request):
 
         sorted_data, count_sort_time = countSort(all_data)
 
+        sorted_data, radix_sort_time = radixSort(all_data)
+
         return render(request, 'result.html', {'columns_descriptions': columns_descriptions,
                                                'sorted_data': sorted_data,
                                                'selection_sort_time': selection_sort_time,
                                                'insertion_sort_time': insertion_sort_time,
                                                'bubble_sort_time': bubble_sort_time,
                                                'shell_sort_time': shell_sort_time,
-                                               'count_sort_time': count_sort_time})
+                                               'count_sort_time': count_sort_time,
+                                               'radix_sort_time': radix_sort_time})
     else:
         # Nothing to do
         pass
@@ -173,3 +176,29 @@ def countSort(dataset):
 
     time_final = time.time() - time_initial
     return sorted_list, time_final
+
+
+def radixSort(dataset):
+    time_initial = time.time()
+    dataset_size = int(len(dataset))
+    modulus = 10
+    divisor = 1
+    while True:
+        # empty array, [[] for i in range(10)]
+        dataset_list = [[], [], [], [], [], [], [], [], [], []]
+        for data in dataset:
+            least_digit = int(data[0]) % modulus
+            least_digit = int(least_digit / divisor)
+            dataset_list[least_digit].append(data)
+        modulus = modulus * 10
+        divisor = divisor * 10
+
+        if len(dataset_list[0]) == dataset_size:
+            time_final = time.time() - time_initial
+            return dataset_list[0], time_final
+
+        dataset = []
+        dataset_append = dataset.append
+        for data_list in dataset_list:
+            for data in data_list:
+                dataset_append(data)
