@@ -13,7 +13,7 @@ def home(request):
         # print("ORDENAÇÃO selectionSort")
 
         sorted_data, selection_sort_time = selectionSort(all_data)
-        
+
         # # print("ORDENAÇÃO insertionSort")
         #
         sorted_data, insertion_sort_time = insertionSort(all_data)
@@ -96,7 +96,7 @@ def insertionSort(dataset):
 def bubbleSort(dataset):
     sorted_data = list(dataset)
     time_initial = time.time()
-    final_position_to_be_checked = len (sorted_data) - 1
+    final_position_to_be_checked = len(sorted_data) - 1
     occurred_swap = True
 
     while (final_position_to_be_checked > 0) and occurred_swap:
@@ -113,6 +113,7 @@ def bubbleSort(dataset):
 
     time_final = time.time() - time_initial
     return sorted_data, time_final
+
 
 def shellSort(dataset):
     sorted_data = list(dataset)
@@ -133,39 +134,42 @@ def shellSort(dataset):
     time_final = time.time() - time_initial
     return sorted_data, time_final
 
-def countSort(dataset): 
+
+def countSort(dataset):
     sorted_list = list(dataset)
     time_initial = time.time()
-    # The sorted_list character array that will have sorted arr 
-    output_list = [0 for position in range(99999)] 
-  
-    # Create a count array to store count of inidividul 
-    # characters and initialize count array as 0 
-    count_list = [0 for position in range(99999)] 
-  
-    # For storing the resulting answer since the  
-    # string is immutable 
-    sorted_list = [0 for data in dataset] 
-  
-    # Store count_list of each character 
+
+    # The sorted_list character array that will have sorted arr
+    output_list = [0 for position in range(max([int(item[0]) for item in dataset]) + 2)]
+    print(max([int(item[0]) for item in dataset]) + 2)
+
+    # Create a count array to store count of inidividul
+    # characters and initialize count array as 0
+    count_list = [0 for position in range(max([int(item[0]) for item in dataset]) + 2)]
+
+    # For storing the resulting answer since the
+    # string is immutable
+    sorted_list = [0 for data in dataset]
+
+    # Store count_list of each character
     for data in dataset:
-        number = int(data[0]) 
+        number = int(data[0])
         count_list[number] += 1
-  
-    # Change count_list[i] so that count_list[i] now contains actual 
-    # position of this character in output_list array 
-    for position in range(99999): 
-        count_list[position] += count_list[position-1] 
-  
-    # Build the output_list character array 
-    for position in range(len(dataset)): 
-        output_list[count_list[int(dataset[position][0])]-1] = dataset[position] 
+
+    # Change count_list[i] so that count_list[i] now contains actual
+    # position of this character in output_list array
+    for position in range(max([int(item[0]) for item in dataset]) + 2):
+        count_list[position] += count_list[position-1]
+
+    # Build the output_list character array
+    for position in range(len(dataset)):
+        output_list[count_list[int(dataset[position][0])]-1] = dataset[position]
         count_list[int(dataset[position][0])] -= 1
-  
-    # Copy the output_list array to arr, so that arr now 
-    # contains sorted characters 
-    for position in range(len(dataset)): 
+
+    # Copy the output_list array to arr, so that arr now
+    # contains sorted characters
+    for position in range(len(dataset)):
         sorted_list[position] = output_list[position]
 
-    time_final = time.time() - time_initial 
+    time_final = time.time() - time_initial
     return sorted_list, time_final
