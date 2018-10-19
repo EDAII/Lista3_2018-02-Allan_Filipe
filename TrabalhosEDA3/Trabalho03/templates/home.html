@@ -14,14 +14,15 @@
 
 <body class="background background-home">
 
-    <form class="container" method="post" enctype="multipart/form-data">
+    <form id="form" class="container" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="row" style="margin: 20px">
             <h3 class="col-12 text-center" style="color:white">Escolha para quais complexidades deseja ordenar o ".csv"</h3>
 
             <div class="col-2"></div>
-            <p class="col-8 text-center" style="color:white">OBS.: Para "Todas - N Quadrado, N Log n e n", recomenda-se um ".csv" com no máximo 5000 registros devido ao tempo de execução elevado de algorítmos n^2.</p>
+            <p class="col-8 text-center" style="color:white">OBS.: Para "Todas - N Quadrado, N Log n e n", recomenda-se
+                um ".csv" com no máximo 5000 registros devido ao tempo de execução elevado de algorítmos n^2.</p>
             <div class="col-2"></div>
 
             <div class="col-4"></div>
@@ -51,7 +52,8 @@
 
         <div class="row" style="margin-top: 15px; margin-bottom: 40px">
             <div class="input-group-append column-in-center">
-                <button class="input-group-text" type="submit">Upload</button>
+                <div id="loader" class="loader-home" hidden="true"></div>
+                <button id="uploadButton" class="input-group-text" type="submit">Upload</button>
             </div>
         </div>
 
@@ -106,6 +108,12 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script>
+        $("#form").submit(function (e) {
+            document.getElementById("uploadButton").hidden = true;
+            document.getElementById("loader").hidden = false;
+        });
+    </script>
 
 </body>
 
