@@ -3,36 +3,68 @@ import time
 
 
 def home(request):
-    if request.method == 'POST' and request.FILES['myfile']:
+    if request.method == 'POST' and request.FILES['myfile'] and request.POST['selectedOption']:
         myfile = request.FILES['myfile']
         byte_str = myfile.file.read()
         # Convert to a "unicode" object
         text_obj = byte_str.decode('UTF-8')
+
         columns_descriptions, all_data = read_csv(text_obj.splitlines())
 
-        sorted_data, selection_sort_time = selectionSort(all_data)
+        # Choosing algorithm options
+        if request.POST['selectedOption'] == "Todas - N Quadrado, N Log n e n":
+            total_time_initial = time.time()
 
-        sorted_data, insertion_sort_time = insertionSort(all_data)
+            sorted_data, selection_sort_time = selectionSort(all_data)
 
-        sorted_data, bubble_sort_time = bubbleSort(all_data)
+            sorted_data, insertion_sort_time = insertionSort(all_data)
 
-        sorted_data, shell_sort_time = shellSort(all_data)
+            sorted_data, bubble_sort_time = bubbleSort(all_data)
 
-        sorted_data, count_sort_time = countSort(all_data)
+            sorted_data, shell_sort_time = shellSort(all_data)
 
-        sorted_data, radix_sort_time = radixSort(all_data)
+            sorted_data, count_sort_time = countSort(all_data)
 
-        sorted_data, quick_sort_time = quickSort(all_data)
+            sorted_data, radix_sort_time = radixSort(all_data)
 
-        return render(request, 'result.html', {'columns_descriptions': columns_descriptions,
-                                               'sorted_data': sorted_data,
-                                               'selection_sort_time': selection_sort_time,
-                                               'insertion_sort_time': insertion_sort_time,
-                                               'bubble_sort_time': bubble_sort_time,
-                                               'shell_sort_time': shell_sort_time,
-                                               'count_sort_time': count_sort_time,
-                                               'radix_sort_time': radix_sort_time,
-                                               'quick_sort_time': quick_sort_time})
+            sorted_data, quick_sort_time = quickSort(all_data)
+
+            total_time_final = time.time() - total_time_initial
+
+            return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
+                                                   'total_time_final': total_time_final,
+                                                   'columns_descriptions': columns_descriptions,
+                                                   'sorted_data': sorted_data,
+                                                   'selection_sort_time': selection_sort_time,
+                                                   'insertion_sort_time': insertion_sort_time,
+                                                   'bubble_sort_time': bubble_sort_time,
+                                                   'shell_sort_time': shell_sort_time,
+                                                   'count_sort_time': count_sort_time,
+                                                   'radix_sort_time': radix_sort_time,
+                                                   'quick_sort_time': quick_sort_time})
+
+        elif request.POST['selectedOption'] == "Mais Velozes - N Log n e n":
+            total_time_initial = time.time()
+
+            sorted_data, count_sort_time = countSort(all_data)
+
+            sorted_data, radix_sort_time = radixSort(all_data)
+
+            sorted_data, quick_sort_time = quickSort(all_data)
+
+            total_time_final = time.time() - total_time_initial
+
+            return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
+                                                   'total_time_final': total_time_final,
+                                                   'columns_descriptions': columns_descriptions,
+                                                   'sorted_data': sorted_data,
+                                                   'count_sort_time': count_sort_time,
+                                                   'radix_sort_time': radix_sort_time,
+                                                   'quick_sort_time': quick_sort_time})
+
+        else:
+            # Nothing to do
+            pass
     else:
         # Nothing to do
         pass
@@ -63,7 +95,7 @@ def selectionSort(dataset):
     for currently_checked_position in range(len(sorted_data)):
         lower_position = currently_checked_position
 
-        for position_searched in range(currently_checked_position+1, len(sorted_data)):
+        for position_searched in range(currently_checked_position + 1, len(sorted_data)):
             if int(sorted_data[lower_position][0]) > int(sorted_data[position_searched][0]):
                 lower_position = position_searched
 
@@ -106,8 +138,8 @@ def bubbleSort(dataset):
             if int(sorted_data[currently_checked_position][0]) > int(sorted_data[currently_checked_position + 1][0]):
                 occurred_swap = True
                 temporary = sorted_data[currently_checked_position]
-                sorted_data[currently_checked_position] = sorted_data[currently_checked_position+1]
-                sorted_data[currently_checked_position+1] = temporary
+                sorted_data[currently_checked_position] = sorted_data[currently_checked_position + 1]
+                sorted_data[currently_checked_position + 1] = temporary
 
         final_position_to_be_checked = final_position_to_be_checked - 1
 
@@ -158,11 +190,11 @@ def countSort(dataset):
     # Change count_list[i] so that count_list[i] now contains actual
     # position of this character in output_list array
     for position in range(max([int(item[0]) for item in dataset]) + 2):
-        count_list[position] += count_list[position-1]
+        count_list[position] += count_list[position - 1]
 
     # Build the output_list character array
     for position in range(len(dataset)):
-        output_list[count_list[int(dataset[position][0])]-1] = dataset[position]
+        output_list[count_list[int(dataset[position][0])] - 1] = dataset[position]
         count_list[int(dataset[position][0])] -= 1
 
     # Copy the output_list array to arr, so that arr now
