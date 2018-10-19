@@ -53,7 +53,11 @@ Foram implementados os algorítmos: Insertion Sort, Selection Sort, Bubble Sort 
 
 ##### Ordenação O(n log n)
 
-Foram implementados os algorítmos: Counting Sort, Radix Sort e Quick Sort.
+Foi implementado o algorítmo: Quick Sort.
+
+##### Ordenação O(n)
+
+Foram implementados os algorítmos: Counting Sort, Radix Sort.
 
 ##### Observações
-Seguem dois ".csv" de exemplo de entrada para a aplicação, um com mais registros e outro menor.
+Seguem três ".csv" de exemplo de entrada para a aplicação, um com muitos registros, outro com uma quantidade média destes e outro com poucos registros.
